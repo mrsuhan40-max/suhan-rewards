@@ -3,49 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suhan Rewards - Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<title>Suhan Rewards</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0b0b0f;color:white;font-family:'Poppins',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.box{background:#1f2937;padding:2rem;border-radius:1rem;width:90%;max-width:400px;border:1px solid #374151}
-.logo{font-family:'Orbitron',sans-serif;color:#facc15;text-align:center;font-size:2rem;margin-bottom:1rem;text-shadow:0 0 20px #facc15}
-input{width:100%;padding:12px;margin:8px 0;background:#374151;border:1px solid #4b5563;border-radius:8px;color:white}
-button{width:100%;padding:12px;margin-top:12px;background:#facc15;color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer}
+body{background:#0b0b0f;color:white;font-family:'Poppins',sans-serif;min-height:100vh;padding-bottom:60px}
+.logo{font-family:'Orbitron',sans-serif;color:#facc15;text-align:center;font-size:2rem;padding:1rem;text-shadow:0 0 20px #facc15}
+.box{background:#1f2937;padding:1.5rem;border-radius:1rem;width:90%;max-width:420px;margin:1rem auto;border:1px solid #374151}
+input{width:100%;padding:12px;margin:8px 0;background:#374151;border:1px solid #4b5563;border-radius:8px;color:white;font-size:14px}
+button{width:100%;padding:12px;margin-top:10px;background:#facc15;color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:15px}
 button:hover{background:#fde047}
 .hidden{display:none}
+.nav{display:flex;gap:8px;margin:1rem auto;max-width:420px;padding:0 1rem}
+.nav button{flex:1;font-size:13px;padding:10px}
+.coin-box{text-align:center;background:#374151;padding:12px;border-radius:8px;margin:1rem 0;font-weight:700;color:#facc15;font-size:18px}
+.wheel{width:280px;height:280px;border-radius:50%;margin:1rem auto;background:conic-gradient(#ef4444 0 45deg,#f59e0b 45deg 90deg,#10b981 90deg 135deg,#3b82f6 135deg 180deg,#8b5cf6 180deg 225deg,#ec4899 225deg 270deg,#6b7280 270deg 315deg,#000 315deg 360deg);position:relative;border:8px solid #facc15}
+.wheel::after{content:'▼';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:24px;color:#facc15}
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:99}
+.popup-box{background:#1f2937;padding:2rem;border-radius:1rem;text-align:center;max-width:300px;border:2px solid #facc15}
+.shop-item{background:#374151;padding:12px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+footer{text-align:center;padding:1rem;color:#9ca3af;font-size:12px;position:fixed;bottom:0;width:100%;background:#0b0b0f}
 </style>
 </head>
 <body>
-<div class="box" id="loginBox">
-  <div class="logo">Suhan Rewards</div>
-  <input type="text" id="user" placeholder="Username">
-  <input type="password" id="pass" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p style="color:#9ca3af;font-size:12px;margin-top:10px;text-align:center">Default: admin / admin123</p>
+
+<div class="logo">Suhan Rewards</div>
+
+<!-- Login/Signup -->
+<div class="box" id="authBox">
+  <h2 style="text-align:center;margin-bottom:1rem">লগইন করুন</h2>
+  <input type="text" id="user" placeholder="ইউজারনেম লিখুন">
+  <input type="password" id="pass" placeholder="পাসওয়ার্ড লিখুন">
+  <input type="text" id="mobile" placeholder="মোবাইল নাম্বার" class="hidden">
+  <button onclick="login()">লগইন</button>
+  <button onclick="toggleAuth()" style="background:#374151;color:white">একাউন্ট নেই? সাইনআপ করুন</button>
 </div>
 
-<div class="box hidden" id="adminBox">
-  <div class="logo" style="font-size:1.5rem">Admin Panel 🔥</div>
-  <p>Welcome Admin!</p>
-  <button onclick="logout()" style="background:#ef4444;color:white;margin-top:20px">Logout</button>
+<!-- Dashboard -->
+<div id="appBox" class="hidden">
+  <div class="nav">
+    <button onclick="showTab('home')">হোম</button>
+    <button onclick="showTab('spin')">স্পিন</button>
+    <button onclick="showTab('shop')">শপ</button>
+    <button onclick="showTab('profile')">প্রোফাইল</button>
+  </div>
+
+  <div class="box" id="homeTab">
+    <div class="coin-box">আপনার কয়েন: <span id="coin">0</span></div>
+    <button onclick="dailyBonus()">দৈনিক বোনাস নিন 🎁</button>
+  </div>
+
+  <div class="box hidden" id="spinTab">
+    <div class="coin-box">বাকি স্পিন: <span id="spinLeft">0</span></div>
+    <div class="wheel" id="wheel"></div>
+    <button onclick="spinNow()">স্পিন করুন 🎡</button>
+    <p style="font-size:12px;color:#9ca3af;text-align:center;margin-top:8px">পুরস্কার: 10, 20, 50, 100, 200, 250, 0, 0 কয়েন</p>
+  </div>
+
+  <div class="box hidden" id="shopTab">
+    <h3 style="margin-bottom:1rem">শপ 🛒</h3>
+    <div class="shop-item"><span>Free Fire Diamond</span><button onclick="buy(500)">500 কয়েন</button></div>
+    <div class="shop-item"><span>PUBG UC</span><button onclick="buy(800)">800 কয়েন</button></div>
+    <div class="shop-item"><span>মোবাইল রিচার্জ 30 টাকা</span><button onclick="buy(300)">300 কয়েন</button></div>
+  </div>
+
+  <div class="box hidden" id="profileTab">
+    <h3 style="margin-bottom:1rem">প্রোফাইল 👤</h3>
+    <input type="text" id="pName" placeholder="নাম">
+    <input type="text" id="pMobile" placeholder="মোবাইল নাম্বার">
+    <input type="password" id="pPass" placeholder="নতুন পাসওয়ার্ড">
+    <button onclick="saveProfile()">সেভ করুন</button>
+    <button onclick="logout()" style="background:#ef4444;color:white;margin-top:1rem">লগআউট</button>
+  </div>
 </div>
 
-<script>
-function login(){
-  const u=document.getElementById('user').value;
-  const p=document.getElementById('pass').value;
-  if(u==='admin' && p==='admin123'){
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('adminBox').classList.remove('hidden');
-  }else{
-    alert('Wrong Username or Password');
-  }
-}
-function logout(){
-  document.getElementById('adminBox').classList.add('hidden');
-  document.getElementById('loginBox').classList.remove('hidden');
-}
-</script>
-</body>
-</html>
+<!-- Daily Bonus Popup -->
+<div class="popup hidden" id="bonusPopup">
+  <div class="popup-box">
+    <h2>দৈনিক বোনাস 🎁</h2>
+    <p style="margin:1rem 0">আজকের বোনাস নিতে বিজ্ঞাপন দেখুন</p>
+    <button onclick="watchAd('bonus')">বোনাস নিন</button>
+    <button onclick="closePopup()" style="background:#374151;color:white">বন্ধ করুন</button>
+  </div>
+</div>
+
+<!-- Ad Timer -->
+<div class="popup hidden" id="adPopup">
+  <div class="popup-box">
+    <h2>বিজ্ঞাপন চলছে...</h2>
+    <p id="adTimer" style="font-size:2rem;color:#facc15;margin:1rem 0">30</p>
+  </div>
+</div>
+
+<footer>
