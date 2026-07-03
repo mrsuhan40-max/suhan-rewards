@@ -1,32 +1,71 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suhan Rewards</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUHAN REWARDS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{background-color:#0a0a0f;color:#fff;font-family:system-ui}
-.neon-yellow{color:#facc15;text-shadow:0 0 10px #facc15}
-.btn-yellow{background-color:#facc15;color:#000;font-weight:bold}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
+body{background:#0a0a0f;color:#fff;font-family:system-ui;min-height:100vh;display:flex;flex-direction:column}
+.logo{font-family:'Poppins',sans-serif;letter-spacing:2px}
+.neon{color:#facc15;text-shadow:0 0 15px #facc15,0 0 30px #facc15}
+.btn{background:#facc15;color:#000;font-weight:bold}
+.card{background:#1f2937}
+.hidden{display:none}
+.wheel{width:300px;height:300px;border:10px solid #facc15;border-radius:50%;position:relative;transition:transform 4s cubic-bezier(.17,.67,.83,.67)}
+.wheel span{position:absolute;width:50%;height:50%;transform-origin:100% 100%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+main{flex:1}
+header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
 </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-<div class="bg-gray-900 p-8 rounded-2xl shadow-lg w-80 text-center">
-<h1 class="text-2xl font-bold neon-yellow mb-4">Suhan Rewards</h1>
-<p class="mb-4 text-gray-300">লগইন করুন</p>
-<input id="user" class="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="Username">
-<input id="pass" type="password" class="w-full p-2 mb-4 bg-gray-800 rounded" placeholder="Password">
-<button onclick="login()" class="w-full p-2 rounded btn-yellow">Login</button>
+<body>
+
+<!-- HIGH PROFILE HEADER/LOGO -->
+<header class="w-full text-center py-4">
+<h1 class="text-4xl md:text-5xl font-extrabold logo neon">SUHAN REWARDS™</h1>
+</header>
+
+<main class="p-4">
+<!-- LOGIN/SIGNUP -->
+<div id="auth" class="max-w-sm mx-auto mt-6 card p-6 rounded-2xl">
+<h2 class="text-xl font-bold text-center mb-4">স্বাগতম</h2>
+<input id="name" class="w-full p-2 mb-2 bg-gray-800 rounded hidden" placeholder="আপনার নাম">
+<input id="email" class="w-full p-2 mb-2 bg-gray-800 rounded hidden" placeholder="ইমেইল">
+<input id="user" class="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="ইউজারনেম">
+<input id="pass" type="password" class="w-full p-2 mb-4 bg-gray-800 rounded" placeholder="পাসওয়ার্ড">
+<input id="ref" class="w-full p-2 mb-4 bg-gray-800 rounded hidden" placeholder="রেফার কোড থাকলে">
+<button id="authBtn" onclick="login()" class="w-full p-2 rounded btn mb-2">লগইন</button>
+<p class="text-center text-sm">নতুন? <span onclick="toggleAuth()" class="text-yellow-400 cursor-pointer">সাইনআপ করুন</span></p>
 </div>
-<script>
-function login(){
-const u=document.getElementById('user').value;
-const p=document.getElementById('pass').value;
-if(u==='admin'&&p==='admin123'){
-alert('সফলভাবে লগইন হয়েছে! দৈনিক বোনাস পাবেন।');
-}else{alert('ভুল তথ্য');}
-}  // <-- EITA CHILO NA TOR CODE E
-</script>
-</body>
-</html>
+
+<!-- DASHBOARD -->
+<div id="dash" class="hidden max-w-md mx-auto">
+<h2 class="text-2xl font-bold text-center mb-4">ড্যাশবোর্ড</h2>
+<div class="card p-4 rounded-2xl mb-3">হ্যালো, <b id="dName"></b></div>
+<div class="card p-6 rounded-2xl mb-3 text-center">
+<p>আপনার কয়েন</p><p id="dCoin" class="text-4xl font-bold neon">0</p>
+<button onclick="dailyBonus()" id="bonusBtn" class="w-full mt-2 p-3 rounded btn">দৈনিক বোনাস +50</button>
+</div>
+<div class="card p-4 rounded-2xl mb-3">
+<p>রেফার করুন +200 কয়েন</p>
+<p id="refLink" class="text-sm bg-gray-800 p-2 rounded mt-2 break-all"></p>
+</div>
+<button onclick="showSpin()" class="w-full p-3 rounded btn mb-2">🎡 স্পিন করুন</button>
+<button onclick="showShop()" class="w-full p-3 rounded bg-blue-600 mb-2">🛒 শপ</button>
+<button onclick="logout()" class="w-full p-3 rounded bg-red-600">লগআউট</button>
+</div>
+
+<!-- SPIN PAGE -->
+<div id="spinPage" class="hidden text-center">
+<h2 class="text-2xl font-bold mb-4">স্পিন হুইল</h2>
+<p>আপনার স্পিন: <b id="spinLeft">0</b></p>
+<div class="wheel mx-auto my-4" id="wheel"></div>
+<button onclick="watchAd()" id="adBtn" class="p-3 rounded btn mb-2">Ad দেখে 5 স্পিন নিন</button>
+<button onclick="spin()" id="spinBtn" class="p-3 rounded btn mb-2 hidden">Spin Now</button>
+<p id="spinResult" class="text-xl"></p>
+<button onclick="backDash()" class="mt-4 p-2 rounded bg-gray-700">ফিরে যান</button>
+</div>
+
+<!-- SHOP PAGE -->
+<div id="shopPage" class="hidden max-w-md mx-auto">
+<h2 class="text-2xl font-bold text-center mb-4">শপ</
