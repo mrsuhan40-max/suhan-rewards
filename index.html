@@ -20,13 +20,11 @@ header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
 </head>
 <body>
 
-<!-- HIGH PROFILE HEADER/LOGO -->
 <header class="w-full text-center py-4">
 <h1 class="text-4xl md:text-5xl font-extrabold logo neon">SUHAN REWARDS™</h1>
 </header>
 
 <main class="p-4">
-<!-- LOGIN/SIGNUP -->
 <div id="auth" class="max-w-sm mx-auto mt-6 card p-6 rounded-2xl">
 <h2 class="text-xl font-bold text-center mb-4">স্বাগতম</h2>
 <input id="name" class="w-full p-2 mb-2 bg-gray-800 rounded hidden" placeholder="আপনার নাম">
@@ -38,7 +36,6 @@ header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
 <p class="text-center text-sm">নতুন? <span onclick="toggleAuth()" class="text-yellow-400 cursor-pointer">সাইনআপ করুন</span></p>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dash" class="hidden max-w-md mx-auto">
 <h2 class="text-2xl font-bold text-center mb-4">ড্যাশবোর্ড</h2>
 <div class="card p-4 rounded-2xl mb-3">হ্যালো, <b id="dName"></b></div>
@@ -55,7 +52,6 @@ header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
 <button onclick="logout()" class="w-full p-3 rounded bg-red-600">লগআউট</button>
 </div>
 
-<!-- SPIN PAGE -->
 <div id="spinPage" class="hidden text-center">
 <h2 class="text-2xl font-bold mb-4">স্পিন হুইল</h2>
 <p>আপনার স্পিন: <b id="spinLeft">0</b></p>
@@ -66,6 +62,76 @@ header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
 <button onclick="backDash()" class="mt-4 p-2 rounded bg-gray-700">ফিরে যান</button>
 </div>
 
-<!-- SHOP PAGE -->
 <div id="shopPage" class="hidden max-w-md mx-auto">
-<h2 class="text-2xl font-bold text-center mb-4">শপ</
+<h2 class="text-2xl font-bold text-center mb-4">শপ</h2>
+<div class="card p-4 rounded-2xl mb-2" onclick="redeem('30Tk Recharge',300)">30Tk Recharge - 300 কয়েন</div>
+<div class="card p-4 rounded-2xl mb-2" onclick="redeem('1GB 7Din',500)">1GB MB 7Din - 500 কয়েন</div>
+<div class="card p-4 rounded-2xl mb-4" onclick="redeem('100 Diamond',5000)">100 Free Fire Diamond - 5000 কয়েন</div>
+<button onclick="backDash()" class="w-full p-2 rounded bg-gray-700">ফিরে যান</button>
+</div>
+</main>
+
+<footer class="w-full text-center p-4 text-gray-400 text-sm">
+Copyright ©️ Suhan Rewards 2026 TM
+</footer>
+
+<script>
+let users=JSON.parse(localStorage.getItem('users'))||{admin:{name:'Admin',email:'a@a.com',pass:'admin123',coin:9999,refBy:''}};
+let currentUser=''; let isSignup=false; let spins=0;
+const prizes=[10,10,20,20,50,50,100,100,200,250];
+
+function toggleAuth(){isSignup=!isSignup;
+name.classList.toggle('hidden');email.classList.toggle('hidden');ref.classList.toggle('hidden');
+authBtn.innerText=isSignup?'সাইনআপ':'লগইন';}
+
+function login(){
+const u=user.value,p=pass.value;
+if(isSignup){
+if(users[u])return alert('User ase');
+users[u]={name:name.value,email:email.value,pass:p,coin:0,refBy:ref.value};
+if(ref.value&&users[ref.value]){users[ref.value].coin+=200;alert('রেফার বোনাস +200 বন্ধুকে দেওয়া হল')}
+localStorage.setItem('users',JSON.stringify(users));alert('সাইনআপ সফল');
+}
+if(users[u]&&users[u].pass===p){currentUser=u;auth.classList.add('hidden');loadDash();}
+else alert('ভুল তথ্য');
+}
+
+function loadDash(){
+dash.classList.remove('hidden');
+dName.innerText=users[currentUser].name;
+dCoin.innerText=users[currentUser].coin;
+refLink.innerText=location.origin+location.pathname+'?ref='+currentUser;
+if(localStorage.getItem('bonus_'+currentUser+'_'+new Date().toDateString()))bonusBtn.disabled=true,bonusBtn.innerText='আজ বোনাস নিয়েছেন';
+}
+
+function dailyBonus(){
+users[currentUser].coin+=50;save();loadDash();
+localStorage.setItem('bonus_'+currentUser+'_'+new Date().toDateString(),1);
+alert('দৈনিক বোনাস +50 কয়েন ✅');
+}
+
+function showSpin(){dash.classList.add('hidden');spinPage.classList.remove('hidden');
+spins=parseInt(localStorage.getItem('spins_'+currentUser)||0);spinLeft.innerText=spins;
+if(spins>0){spinBtn.classList.remove('hidden');adBtn.classList.add('hidden');}
+makeWheel();}
+
+function watchAd(){alert('15 সেকেন্ড Ad দেখুন...');
+setTimeout(()=>{spins=5;localStorage.setItem('spins_'+currentUser,5);spinLeft.innerText=5;spinBtn.classList.remove('hidden');adBtn.classList.add('hidden');alert('5 স্পিন পেয়েছেন');},1500);}
+
+function spin(){if(spins<=0)return;spins--;localStorage.setItem('spins_'+currentUser,spins);spinLeft.innerText=spins;
+let deg=3600+Math.floor(Math.random()*3600);wheel.style.transform=`rotate(${deg}deg)`;
+setTimeout(()=>{let prize=prizes[Math.floor(Math.random()*prizes.length)];
+users[currentUser].coin+=prize;save();spinResult.innerText='আপনি পেয়েছেন: '+prize+' কয়েন 🎉';loadDash();},4000);
+if(spins==0){spinBtn.classList.add('hidden');adBtn.classList.remove('hidden');}}
+
+function showShop(){dash.classList.add('hidden');shopPage.classList.remove('hidden');}
+function backDash(){spinPage.classList.add('hidden');shopPage.classList.add('hidden');dash.classList.remove('hidden');}
+function redeem(item,cost){if(users[currentUser].coin<cost)return alert('কয়েন নেই');
+users[currentUser].coin-=cost;save();let id=prompt(item+' নিতে আপনার Game ID / Number দিন');alert('Request গেছে Admin এর কাছে ✅');}
+
+function makeWheel(){wheel.innerHTML='';prizes.forEach((p,i)=>{let s=document.createElement('span');s.style.transform=`rotate(${i*36}deg) skewY(-54deg)`;s.innerHTML=`<b style="transform:skewY(54deg) rotate(18deg)">${p}</b>`;wheel.appendChild(s);});}
+function save(){localStorage.setItem('users',JSON.stringify(users));}
+function logout(){currentUser='';dash.classList.add('hidden');auth.classList.remove('hidden');}
+</script>
+</body>
+</html>
