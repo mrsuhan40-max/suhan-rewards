@@ -18,7 +18,6 @@ body{background-color:#0a0a0f;color:#fff;font-family:system-ui}
 <input id="user" class="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="Username">
 <input id="pass" type="password" class="w-full p-2 mb-4 bg-gray-800 rounded" placeholder="Password">
 <button onclick="login()" class="w-full p-2 rounded btn-yellow">Login</button>
-<p class="text-xs text-gray-500 mt-2">Default: admin / admin123</p>
 </div>
 <script>
 function login(){
@@ -27,6 +26,7 @@ const p=document.getElementById('pass').value;
 if(u==='admin'&&p==='admin123'){
 alert('সফলভাবে লগইন হয়েছে! দৈনিক বোনাস পাবেন।');
 }else{alert('ভুল তথ্য');}
+}  // <-- EITA CHILO NA TOR CODE E
 </script>
 </body>
 </html>
