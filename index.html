@@ -1,137 +1,442 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUHAN REWARDS</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
-body{background:#0a0a0f;color:#fff;font-family:system-ui;min-height:100vh;display:flex;flex-direction:column}
-.logo{font-family:'Poppins',sans-serif;letter-spacing:2px}
-.neon{color:#facc15;text-shadow:0 0 15px #facc15,0 0 30px #facc15}
-.btn{background:#facc15;color:#000;font-weight:bold}
-.card{background:#1f2937}
-.hidden{display:none}
-.wheel{width:300px;height:300px;border:10px solid #facc15;border-radius:50%;position:relative;transition:transform 4s cubic-bezier(.17,.67,.83,.67)}
-.wheel span{position:absolute;width:50%;height:50%;transform-origin:100% 100%;display:flex;align-items:center;justify-content:center;font-weight:bold}
-main{flex:1}
-header,footer{border-bottom:1px solid #333;border-top:1px solid #333}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoktoSylhet.Com | সিলেটের রক্তদান প্ল্যাটফর্ম</title>
+    
+    <!-- PWA Meta Tags (মোবাইল অ্যাপের মতো দেখানোর জন্য) -->
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RoktoSylhet">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tailwind CSS for modern and clean UI -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .active-tab { background-color: #dc2626; color: white; }
+        /* অ্যাপের ফিল দেওয়ার জন্য টেক্সট সিলেক্ট বন্ধ করা */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen font-sans">
 
-<header class="w-full text-center py-4">
-<h1 class="text-4xl md:text-5xl font-extrabold logo neon">SUHAN REWARDS™</h1>
-</header>
+    <!-- PWA INSTALL BANNER POPUP -->
+    <div id="install-banner" class="hidden fixed bottom-5 left-4 right-4 bg-gray-900 text-white p-4 rounded-2xl shadow-2xl z-50 flex items-center justify-between border border-gray-700 animate-bounce">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-droplet text-red-500 text-2xl"></i>
+            <div>
+                <p class="font-black text-sm">RoktoSylhet অ্যাপ ইন্সটল করুন</p>
+                <p class="text-xs text-gray-400">১ সেকেন্ডে হোম স্ক্রিনে যোগ করুন</p>
+            </div>
+        </div>
+        <button id="btn-install" class="bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl shadow-md transition-all">
+            INSTALL
+        </button>
+    </div>
 
-<main class="p-4">
-<div id="auth" class="max-w-sm mx-auto mt-6 card p-6 rounded-2xl">
-<h2 class="text-xl font-bold text-center mb-4">স্বাগতম</h2>
-<input id="name" class="w-full p-2 mb-2 bg-gray-800 rounded hidden" placeholder="আপনার নাম">
-<input id="email" class="w-full p-2 mb-2 bg-gray-800 rounded hidden" placeholder="ইমেইল">
-<input id="user" class="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="ইউজারনেম">
-<input id="pass" type="password" class="w-full p-2 mb-4 bg-gray-800 rounded" placeholder="পাসওয়ার্ড">
-<input id="ref" class="w-full p-2 mb-4 bg-gray-800 rounded hidden" placeholder="রেফার কোড থাকলে">
-<button id="authBtn" onclick="login()" class="w-full p-2 rounded btn mb-2">লগইন</button>
-<p class="text-center text-sm">নতুন? <span onclick="toggleAuth()" class="text-yellow-400 cursor-pointer">সাইনআপ করুন</span></p>
-</div>
+    <!-- HEADER / NAVIGATION (HIGH QUALITY BIG LOGO) -->
+    <header class="bg-white shadow-md sticky top-0 z-40 border-b border-gray-100">
+        <div class="container mx-auto px-4 py-4 flex flex-col items-center gap-4">
+            <!-- BIG HIGH QUALITY LOGO BRANDING -->
+            <div class="flex items-center gap-3 cursor-pointer transform active:scale-95 transition-all" onclick="switchTab('home')">
+                <div class="bg-red-50 w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm border border-red-100">
+                    <i class="fa-solid fa-droplet text-red-600 text-4xl filter drop-shadow-[0_4px_6px_rgba(220,38,38,0.4)] animate-pulse"></i>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-red-600 tracking-tighter flex flex-col leading-none">
+                    <span class="font-black text-red-600">RoktoSylhet<span class="text-gray-800">.Com</span></span>
+                    <span class="text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-1 font-bold">সিলেটের আপদকালীন রক্তদান নেটওয়ার্ক</span>
+                </h1>
+            </div>
+            
+            <!-- Navigation Tabs (App Navigation Style) -->
+            <nav class="flex flex-wrap gap-2 justify-center w-full max-w-md bg-gray-100 p-1.5 rounded-2xl">
+                <button id="btn-home" onclick="switchTab('home')" class="active-tab flex-1 py-2.5 rounded-xl font-black text-xs md:text-sm transition-all shadow-sm text-center"><i class="fa-solid fa-house block mb-0.5 text-base"></i> Home</button>
+                <button id="btn-search" onclick="switchTab('search')" class="text-gray-600 flex-1 py-2.5 rounded-xl font-black text-xs md:text-sm transition-all text-center"><i class="fa-solid fa-magnifying-glass block mb-0.5 text-base"></i> Search</button>
+                <button id="btn-form" onclick="switchTab('form')" class="text-gray-600 flex-1 py-2.5 rounded-xl font-black text-xs md:text-sm transition-all text-center"><i class="fa-solid fa-user-plus block mb-0.5 text-base"></i> Form</button>
+                <button id="btn-emergency" onclick="switchTab('emergency')" class="text-gray-600 flex-1 py-2.5 rounded-xl font-black text-xs md:text-sm transition-all text-center"><i class="fa-solid fa-bullhorn block mb-0.5 text-base"></i> Live</button>
+                <button id="btn-hero" onclick="switchTab('hero')" class="text-gray-600 flex-1 py-2.5 rounded-xl font-black text-xs md:text-sm transition-all text-center"><i class="fa-solid fa-trophy block mb-0.5 text-base"></i> Hero</button>
+            </nav>
+        </div>
+    </header>
 
-<div id="dash" class="hidden max-w-md mx-auto">
-<h2 class="text-2xl font-bold text-center mb-4">ড্যাশবোর্ড</h2>
-<div class="card p-4 rounded-2xl mb-3">হ্যালো, <b id="dName"></b></div>
-<div class="card p-6 rounded-2xl mb-3 text-center">
-<p>আপনার কয়েন</p><p id="dCoin" class="text-4xl font-bold neon">0</p>
-<button onclick="dailyBonus()" id="bonusBtn" class="w-full mt-2 p-3 rounded btn">দৈনিক বোনাস +50</button>
-</div>
-<div class="card p-4 rounded-2xl mb-3">
-<p>রেফার করুন +200 কয়েন</p>
-<p id="refLink" class="text-sm bg-gray-800 p-2 rounded mt-2 break-all"></p>
-</div>
-<button onclick="showSpin()" class="w-full p-3 rounded btn mb-2">🎡 স্পিন করুন</button>
-<button onclick="showShop()" class="w-full p-3 rounded bg-blue-600 mb-2">🛒 শপ</button>
-<button onclick="logout()" class="w-full p-3 rounded bg-red-600">লগআউট</button>
-</div>
+    <!-- MAIN CONTENT AREA -->
+    <main class="container mx-auto px-4 py-6 flex-grow max-w-4xl">
 
-<div id="spinPage" class="hidden text-center">
-<h2 class="text-2xl font-bold mb-4">স্পিন হুইল</h2>
-<p>আপনার স্পিন: <b id="spinLeft">0</b></p>
-<div class="wheel mx-auto my-4" id="wheel"></div>
-<button onclick="watchAd()" id="adBtn" class="p-3 rounded btn mb-2">Ad দেখে 5 স্পিন নিন</button>
-<button onclick="spin()" id="spinBtn" class="p-3 rounded btn mb-2 hidden">Spin Now</button>
-<p id="spinResult" class="text-xl"></p>
-<button onclick="backDash()" class="mt-4 p-2 rounded bg-gray-700">ফিরে যান</button>
-</div>
+        <!-- PAGE 1: HOME -->
+        <section id="page-home" class="tab-content block">
+            <div class="text-center my-8 max-w-xl mx-auto">
+                <h2 class="text-3xl font-black text-gray-900 mb-3 leading-tight">সিলেটবাসীর জরুরি রক্ত সেবায় আমরা চব্বিশ ঘণ্টা প্রস্তুত</h2>
+                <p class="text-gray-500 text-sm mb-6">কোনো মধ্যস্বত্বভোগী বা দালাল নয়, সরাসরি ভেরিফাইড রক্তদাতার সাথে হোয়াটসঅ্যাপের মাধ্যমে তাৎক্ষণিক যোগাযোগ করুন সম্পূর্ণ নিরাপদে।</p>
+                
+                <!-- APP ACCELERATED BUTTONS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button onclick="switchTab('search')" class="bg-red-600 active:bg-red-700 text-white font-black text-lg p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-2xl animate-bounce"></i> রক্ত প্রয়োজন (Search)
+                    </button>
+                    <button onclick="switchTab('form')" class="bg-emerald-600 active:bg-emerald-700 text-white font-black text-lg p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hand-holding-hand text-2xl"></i> ডোনার হতে চাই (Register)
+                    </button>
+                </div>
+            </div>
 
-<div id="shopPage" class="hidden max-w-md mx-auto">
-<h2 class="text-2xl font-bold text-center mb-4">শপ</h2>
-<div class="card p-4 rounded-2xl mb-2" onclick="redeem('30Tk Recharge',300)">30Tk Recharge - 300 কয়েন</div>
-<div class="card p-4 rounded-2xl mb-2" onclick="redeem('1GB 7Din',500)">1GB MB 7Din - 500 কয়েন</div>
-<div class="card p-4 rounded-2xl mb-4" onclick="redeem('100 Diamond',5000)">100 Free Fire Diamond - 5000 কয়েন</div>
-<button onclick="backDash()" class="w-full p-2 rounded bg-gray-700">ফিরে যান</button>
-</div>
-</main>
+            <!-- Features Quick Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-shield-heart"></i></div>
+                    <div>
+                        <h3 class="font-black text-gray-900 text-base mb-1">১০০% নম্বর প্রাইভেসী</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">মেয়ে ডোনারদের সুরক্ষার্থে ডিরেক্ট কলিং বন্ধ। শুধু হোয়াটসঅ্যাপ রিকোয়েস্টের সুবিধা।</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-id-card"></i></div>
+                    <div>
+                        <h3 class="font-black text-gray-900 text-base mb-1">ভেরিফাইড স্মার্ট ডাটা</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">NID বা প্রাতিষ্ঠানিক পরিচয়পত্র যাচাইয়ের মাধ্যমে সবুজ ভেরিফাইড ব্যাজ প্রদান।</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-ban"></i></div>
+                    <div>
+                        <h3 class="font-black text-gray-900 text-base mb-1">অটো-ব্যান প্রটোকল</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">যেকোনো ভুয়া আইডি বা দালালের বিরুদ্ধে রিপোর্ট করার সুবিধা। ৩ রিপোর্টে আইডি স্থায়ী ব্যান।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<footer class="w-full text-center p-4 text-gray-400 text-sm">
-Copyright ©️ Suhan Rewards 2026 TM
-</footer>
+        <!-- PAGE 2: DONOR SEARCH -->
+        <section id="page-search" class="tab-content hidden">
+            <h2 class="text-2xl font-black mb-4 text-gray-900 border-l-4 border-red-600 pl-2">রক্তদাতা অনুসন্ধান ফিল্টার</h2>
+            
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 shadow-sm">
+                <div>
+                    <label class="block font-black text-xs text-gray-500 mb-1.5 uppercase">রক্তের গ্রুপ</label>
+                    <select id="search-blood" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="ALL">সব রক্তের গ্রুপ</option>
+                        <option value="A+">A+ (এ পজিটিভ)</option>
+                        <option value="A-">A- (এ নেগেティブ)</option>
+                        <option value="B+">B+ (বি পজিটিভ)</option>
+                        <option value="B-">B- (বি নেগেティブ)</option>
+                        <option value="AB+">AB+ (এবি পজিটিভ)</option>
+                        <option value="AB-">AB- (এবি নেগেティブ)</option>
+                        <option value="O+">O+ (ও পজিটিভ)</option>
+                        <option value="O-">O- (ও নেগেティブ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-black text-xs text-gray-500 mb-1.5 uppercase">সিলেটের এলাকা</label>
+                    <select id="search-area" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="ALL">পুরো সিলেট শহর</option>
+                        <option value="Zindabazar">জিন্দাবাজার</option>
+                        <option value="Amberkhana">আম্বরখানা</option>
+                        <option value="Upashahar">উপশহর</option>
+                        <option value="Shibgonj">শিবগঞ্জ</option>
+                        <option value="Osmani Medical">ওসমানী মেডিকেল এলাকা</option>
+                        <option value="Subidbazar">সুবিদবাজার</option>
+                        <option value="Tilagarh">টিলাগড়</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="filterDonors()" class="w-full bg-red-600 text-white font-black p-3 rounded-xl shadow transition-all active:scale-95">
+                        <i class="fa-solid fa-filter mr-1"></i> ফিল্টার ডাটা
+                    </button>
+                </div>
+            </div>
 
-<script>
-let users=JSON.parse(localStorage.getItem('users'))||{admin:{name:'Admin',email:'a@a.com',pass:'admin123',coin:9999,refBy:''}};
-let currentUser=''; let isSignup=false; let spins=0;
-const prizes=[10,10,20,20,50,50,100,100,200,250];
+            <div id="donor-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Build dynamically via JS -->
+            </div>
+        </section>
 
-function toggleAuth(){isSignup=!isSignup;
-name.classList.toggle('hidden');email.classList.toggle('hidden');ref.classList.toggle('hidden');
-authBtn.innerText=isSignup?'সাইনআপ':'লগইন';}
+        <!-- PAGE 3: DONOR FORM -->
+        <section id="page-form" class="tab-content hidden max-w-md mx-auto">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <h2 class="text-2xl font-black mb-1 text-gray-900 text-center">নতুন রক্তদাতা নিবন্ধন</h2>
+                <p class="text-center text-xs text-gray-400 mb-5">মানবতার কল্যাণে আপনার তথ্য যুক্ত করুন।</p>
+                
+                <form id="donor-registration-form" onsubmit="registerDonor(event)" class="space-y-4">
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">পূর্ণ নাম *</label>
+                        <input type="text" required id="reg-name" placeholder="যেমন: রাসেল আহমদ" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-600 mb-1">রক্তের গ্রুপ *</label>
+                            <select id="reg-blood" required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="A+">A+</option><option value="A-">A-</option>
+                                <option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-xs text-gray-600 mb-1">স্থায়ী এলাকা *</label>
+                            <select id="reg-area" required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="Zindabazar">জিন্দাবাজার</option>
+                                <option value="Amberkhana">আম্বরখানা</option>
+                                <option value="Upashahar">উপশহর</option>
+                                <option value="Shibgonj">শিবগঞ্জ</option>
+                                <option value="Osmani Medical">ওসমানী মেডিকেল এলাকা</option>
+                                <option value="Subidbazar">সুবিদবাজার</option>
+                                <option value="Tilagarh">টিলাগড়</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">হোয়াটসঅ্যাপ নম্বর (Country Code সহ) *</label>
+                        <input type="tel" required id="reg-phone" placeholder="যেমন: 88017XXXXXXXX" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">সর্বশেষ রক্তদানের তারিখ (ঐচ্ছিক)</label>
+                        <input type="date" id="reg-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="bg-green-50 border border-green-100 p-4 rounded-xl">
+                        <label class="block font-black text-xs text-green-800 mb-1"><i class="fa-solid fa-circle-check"></i> স্মার্ট কার্ড বা ভেরিফিকেশন আইডি আপলোড</label>
+                        <p class="text-[11px] text-green-700 mb-2">সুরক্ষিত ডাটাবেজের জন্য NID বা স্টুডেন্ট আইডি দিন। প্রোফাইলে গ্রিন টিক শো করবে।</p>
+                        <input type="file" id="reg-nid" class="text-xs text-gray-500 block w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-green-600 file:text-white">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-black p-3.5 rounded-xl text-sm shadow transition-all active:scale-95">
+                        নিবন্ধন করুন এবং ডিজিটাল আইডি কার্ড নিন <i class="fa-solid fa-arrow-right ml-0.5"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
 
-function login(){
-const u=user.value,p=pass.value;
-if(isSignup){
-if(users[u])return alert('User ase');
-users[u]={name:name.value,email:email.value,pass:p,coin:0,refBy:ref.value};
-if(ref.value&&users[ref.value]){users[ref.value].coin+=200;alert('রেফার বোনাস +200 বন্ধুকে দেওয়া হল')}
-localStorage.setItem('users',JSON.stringify(users));alert('সাইনআপ সফল');
-}
-if(users[u]&&users[u].pass===p){currentUser=u;auth.classList.add('hidden');loadDash();}
-else alert('ভুল তথ্য');
-}
+        <!-- PAGE 4: EMERGENCY POST -->
+        <section id="page-emergency" class="tab-content hidden max-w-md mx-auto">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <h2 class="text-2xl font-black mb-1 text-gray-900 text-center"><i class="fa-solid fa-triangle-exclamation text-red-600"></i> জরুরি রক্তের পোস্ট রিকোয়েস্ট</h2>
+                <p class="text-center text-xs text-gray-400 mb-5">মুহূর্তে পুরো সিলেটে রিকোয়েস্টটি প্রচার করুন।</p>
+                
+                <form onsubmit="handleEmergencyPost(event)" class="space-y-4">
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">রুগীর শারীরিক সমস্যা বা রোগের বিবরণ</label>
+                        <input type="text" required placeholder="যেমন: দুর্ঘটনাজনিত অপারেশন / সিজারিয়ান কেস" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-600 mb-1">প্রয়োজনীয় গ্রুপ *</label>
+                            <select required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="O+">O+</option><option value="A+">A+</option><option value="B+">B+</option><option value="AB+">AB+</option>
+                                <option value="O-">O-</option><option value="A-">A-</option><option value="B-">B-</option><option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-xs text-gray-600 mb-1">রক্তের পরিমাণ *</label>
+                            <input type="number" required placeholder="যেমন: ২ ব্যাগ" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">সিলেটের নির্দিষ্ট হাসপাতাল *</label>
+                        <select required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <option value="Osmani">ওসমানী মেডিকেল কলেজ হাসপাতাল</option>
+                            <option value="Ragib">জালালাবাদ রাগীব-রাবেয়া মেডিকেল</option>
+                            <option value="NorthEast">নর্থ ইস্ট মেডিকেল কলেজ</option>
+                            <option value="Womens">সিলেট উইমেন্স মেডিকেল কলেজ</option>
+                            <option value="Other">অন্যান্য (সিলেট সদর হাসপাতাল)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-xs text-gray-600 mb-1">জরুরি যোগাযোগের মোবাইল নম্বর</label>
+                        <input type="tel" required placeholder="01XXXXXXXXX" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <button type="submit" class="w-full bg-red-600 text-white font-black p-3.5 rounded-xl text-sm shadow transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> হোয়াটসঅ্যাপ নেটওয়ার্কে লাইভ করুন
+                    </button>
+                </form>
+            </div>
+        </section>
 
-function loadDash(){
-dash.classList.remove('hidden');
-dName.innerText=users[currentUser].name;
-dCoin.innerText=users[currentUser].coin;
-refLink.innerText=location.origin+location.pathname+'?ref='+currentUser;
-if(localStorage.getItem('bonus_'+currentUser+'_'+new Date().toDateString()))bonusBtn.disabled=true,bonusBtn.innerText='আজ বোনাস নিয়েছেন';
-}
+        <!-- PAGE 5: HERO DONOR -->
+        <section id="page-hero" class="tab-content hidden">
+            <div class="text-center max-w-md mx-auto mb-8">
+                <h2 class="text-2xl font-black text-gray-900 mb-1"><i class="fa-solid fa-trophy text-amber-500 text-3xl"></i> চলতি মাসের সেরা ১০ হিরো ডোনার</h2>
+                <p class="text-gray-400 text-xs">সিলেটে সর্বোচ্চবার রক্ত দিয়ে মানুষের প্রাণ বাঁচানো বীরদের তালিকা। ❤️</p>
+            </div>
 
-function dailyBonus(){
-users[currentUser].coin+=50;save();loadDash();
-localStorage.setItem('bonus_'+currentUser+'_'+new Date().toDateString(),1);
-alert('দৈনিক বোনাস +50 কয়েন ✅');
-}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 relative text-center shadow-sm">
+                    <span class="absolute top-2 left-2 bg-amber-500 text-white font-black w-6 h-6 rounded-full flex items-center justify-center text-[10px]">১ম</span>
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-2 border-2 border-amber-400 flex items-center justify-center"><i class="fa-solid fa-user text-2xl text-gray-400"></i></div>
+                    <h3 class="font-bold text-sm text-gray-900">মাহিন আহমদ</h3>
+                    <p class="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full inline-block my-1">O+ Positive</p>
+                    <p class="text-xs font-bold text-gray-600"><i class="fa-solid fa-droplet text-red-600 mr-0.5"></i> দান: ১৪ বার</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 relative text-center shadow-sm">
+                    <span class="absolute top-2 left-2 bg-slate-400 text-white font-black w-6 h-6 rounded-full flex items-center justify-center text-[10px]">২য়</span>
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-2 border-2 border-slate-300 flex items-center justify-center"><i class="fa-solid fa-user text-2xl text-gray-400"></i></div>
+                    <h3 class="font-bold text-sm text-gray-900">সাইফুর রহমান</h3>
+                    <p class="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full inline-block my-1">A+ Positive</p>
+                    <p class="text-xs font-bold text-gray-600"><i class="fa-solid fa-droplet text-red-600 mr-0.5"></i> দান: ১১ বার</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 relative text-center shadow-sm">
+                    <span class="absolute top-2 left-2 bg-amber-700 text-white font-black w-6 h-6 rounded-full flex items-center justify-center text-[10px]">৩য়</span>
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-2 border-2 border-amber-600 flex items-center justify-center"><i class="fa-solid fa-user text-2xl text-gray-400"></i></div>
+                    <h3 class="font-bold text-sm text-gray-900">নাফিসা আক্তার</h3>
+                    <p class="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full inline-block my-1">B+ Positive</p>
+                    <p class="text-xs font-bold text-gray-600"><i class="fa-solid fa-droplet text-red-600 mr-0.5"></i> দান: ৯ বার</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center shadow-sm">
+                    <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-lg mb-1"><i class="fa-solid fa-star"></i></div>
+                    <p class="font-bold text-xs text-gray-700">পরবর্তী হিরো আপনি?</p>
+                </div>
+            </div>
+        </section>
 
-function showSpin(){dash.classList.add('hidden');spinPage.classList.remove('hidden');
-spins=parseInt(localStorage.getItem('spins_'+currentUser)||0);spinLeft.innerText=spins;
-if(spins>0){spinBtn.classList.remove('hidden');adBtn.classList.add('hidden');}
-makeWheel();}
+    </main>
 
-function watchAd(){alert('15 সেকেন্ড Ad দেখুন...');
-setTimeout(()=>{spins=5;localStorage.setItem('spins_'+currentUser,5);spinLeft.innerText=5;spinBtn.classList.remove('hidden');adBtn.classList.add('hidden');alert('5 স্পিন পেয়েছেন');},1500);}
+    <footer class="bg-red-600 text-white pt-10 pb-6 mt-auto shadow-[0_-10px_30px_rgba(0,0,0,0.15)]">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center">
+                <h3 class="text-2xl md:text-3xl font-black mb-6 tracking-wide flex items-center justify-center gap-2 border-b-2 border-white/20 pb-3">
+                    <i class="fa-solid fa-triangle-exclamation text-yellow-300 animate-pulse"></i> 
+                    গুরুত্বপূর্ণ আইনি নির্দেশনা ও সতর্কাভিজ্ঞপ্তি
+                </h3>
+                
+                <div class="bg-black/25 my-6 p-6 rounded-2xl text-left border border-white/10 shadow-inner">
+                    <p class="font-black text-yellow-300 text-xl mb-4 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-scale-balanced"></i> আইনগত ও নীতিগত নির্দেশনাবলী:
+                    </p>
+                    <ul class="space-y-3 font-bold text-base md:text-lg pl-2 text-gray-100">
+                        <li class="flex items-start gap-3">
+                            <span class="bg-yellow-400 text-red-700 font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">১</span> 
+                            <span>রক্তগ্রহীতা (রোগী) কিংবা রক্তদাতার (ডোনার) মধ্যে যেকোনো প্রকার আর্থিক লেনদেন বা কোনো উদ্দেশ্যে ১ টাকা আদান-প্রদান করা সম্পূর্ণ নিষিদ্ধ ও আইনবহির্ভূত।</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-yellow-400 text-red-700 font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">২</span> 
+                            <span>মানবিক রক্ত কেনা-বেচা করা দেশের প্রচলিত আইন অনুযায়ী একটি গুরুতর দণ্ডনীয় অপরাধ।</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-yellow-400 text-red-700 font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">৩</span> 
+                            <span>এই প্ল্যাটফর্মে মিথ্যা বা বিভ্রান্তিকর তথ্য প্রদান করা অথবা ভুয়া রক্তদাতা (Fake Donor) সেজে কোনো প্রকার প্রতারণার আশ্রয় নেওয়া আইনত শাস্তিযোগ্য অপরাধ।</span>
+                        </li>
+                    </ul>
+                </div>
 
-function spin(){if(spins<=0)return;spins--;localStorage.setItem('spins_'+currentUser,spins);spinLeft.innerText=spins;
-let deg=3600+Math.floor(Math.random()*3600);wheel.style.transform=`rotate(${deg}deg)`;
-setTimeout(()=>{let prize=prizes[Math.floor(Math.random()*prizes.length)];
-users[currentUser].coin+=prize;save();spinResult.innerText='আপনি পেয়েছেন: '+prize+' কয়েন 🎉';loadDash();},4000);
-if(spins==0){spinBtn.classList.add('hidden');adBtn.classList.remove('hidden');}}
+                <div class="bg-red-700/40 p-5 rounded-2xl border border-white/10 my-6 text-justify md:text-center">
+                    <p class="text-lg font-extrabold text-white leading-relaxed mb-4">
+                        <span class="text-yellow-300 block text-xl font-black mb-1 text-center"><i class="fa-solid fa-circle-info"></i> দাবি পরিত্যাগ (Disclaimer)</span>
+                        <span class="text-white">RoktoSylhet.Com</span> একটি সম্পূর্ণ অলাভজনক, জনকল্যাণমুখী ও স্বেচ্ছাসেবী ডিজিটাল ডিরেক্টরি। আমরা কোনো প্রাতিষ্ঠানিক মাধ্যম, মধ্যস্বত্বভোগী বা দালাল চক্র নই এবং কোনো প্রকার রক্ত ক্রয়-বিক্রয়ের সাথে যুক্ত নই। এই প্ল্যাটফর্মের একমাত্র উদ্দেশ্য হলো রক্তদাতা ও রক্তগ্রহীতার মধ্যে সম্পূর্ণ বিনামূল্যে একটি যোগাযোগের সেতু তৈরি করে দেওয়া।
+                    </p>
+                    <p class="text-base md:text-lg font-bold text-red-100 leading-relaxed pt-3 border-t border-white/10">
+                        অনুরোধবশত, চূড়ান্ত রক্তগ্রহণের পূর্বে সংশ্লিষ্ট হাসপাতালে গিয়ে রক্তদাতার শারীরিক সুস্থতা ও রক্তের গ্রুপ নিজস্ব দায়িত্বে শতভাগ যাচাই করে নেওয়ার জন্য বিশেষভাবে অনুরোধ করা হলো। রক্তদান বা যোগাযোগের পরোক্ষে সংঘটিত কোনো প্রকার অনাকাঙ্ক্ষিত আর্থিক লেনদেন বা ঘটনার জন্য <span class="text-white">RoktoSylhet.Com</span> কর্তৃপক্ষ কোনো অবস্থাতেই দায়ী থাকবে না।
+                    </p>
+                </div>
 
-function showShop(){dash.classList.add('hidden');shopPage.classList.remove('hidden');}
-function backDash(){spinPage.classList.add('hidden');shopPage.classList.add('hidden');dash.classList.remove('hidden');}
-function redeem(item,cost){if(users[currentUser].coin<cost)return alert('কয়েন নেই');
-users[currentUser].coin-=cost;save();let id=prompt(item+' নিতে আপনার Game ID / Number দিন');alert('Request গেছে Admin এর কাছে ✅');}
+                <div class="my-6">
+                    <p class="text-yellow-300 font-black text-2xl md:text-3xl tracking-wide uppercase bg-black/30 inline-block px-6 py-2 rounded-full border border-yellow-300/30 shadow-md">
+                        <i class="fa-solid fa-heart text-red-500 mr-1"></i> জীবন বাঁচান, দালাল ধরিয়ে দিন।
+                    </p>
+                </div>
 
-function makeWheel(){wheel.innerHTML='';prizes.forEach((p,i)=>{let s=document.createElement('span');s.style.transform=`rotate(${i*36}deg) skewY(-54deg)`;s.innerHTML=`<b style="transform:skewY(54deg) rotate(18deg)">${p}</b>`;wheel.appendChild(s);});}
-function save(){localStorage.setItem('users',JSON.stringify(users));}
-function logout(){currentUser='';dash.classList.add('hidden');auth.classList.remove('hidden');}
-</script>
+                <p class="text-xs md:text-sm text-red-200 mt-8 pt-4 border-t border-white/15 tracking-wide">
+                    &copy; 2026 RoktoSylhet.Com | সর্বস্বত্ব সংরক্ষিত। <br class="sm:hidden"> Built for Humanity in Sylhet.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let donorsData = [
+            { id: 1, name: "আহমেদ মারুফ", blood: "O+", area: "Zindabazar", phone: "8801712345678", lastDonate: "2026-02-15", verified: true, reports: 0 },
+            { id: 2, name: "ফাহমিদা চৌধুরী", blood: "A+", area: "Amberkhana", phone: "8801911111111", lastDonate: "2026-05-20", verified: true, reports: 0 },
+            { id: 3, name: "সুমন তালুকদার", blood: "B-", area: "Upashahar", phone: "8801500000000", lastDonate: "", verified: false, reports: 0 }
+        ];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
+            document.getElementById(`page-${tabId}`).classList.replace('hidden', 'block');
+            
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active-tab');
+                btn.classList.add('text-gray-600');
+            });
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) { activeBtn.classList.add('active-tab'); activeBtn.classList.remove('text-gray-600'); }
+            if(tabId === 'search') filterDonors();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderDonors(dataList) {
+            const container = document.getElementById('donor-list');
+            container.innerHTML = '';
+            if(dataList.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-bold">কোনো ডোনার পাওয়া যায়নি।</div>`;
+                return;
+            }
+            dataList.forEach(donor => {
+                const waMessage = encodeURIComponent(`Assalamu Alaikum Bhai, RoktoSylhet.Com theke bolchi. Apnar ${donor.blood} Rokto dorkar chilo.`);
+                const waLink = `https://wa.me/${donor.phone}?text=${waMessage}`;
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-between relative shadow-sm";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-red-600 text-white font-black text-sm px-2.5 py-0.5 rounded-lg">${donor.blood}</span>
+                            <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Available</span>
+                        </div>
+                        <h4 class="font-black text-base text-gray-900 flex items-center gap-1">${donor.name} ${donor.verified ? '<i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>' : ''}</h4>
+                        <p class="text-xs text-gray-500"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> ${donor.area}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-50 flex gap-1.5">
+                        <a href="${waLink}" target="_blank" class="flex-grow bg-emerald-600 text-white font-bold text-center py-2 rounded-xl text-xs flex items-center justify-center gap-1"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <button onclick="reportDonor(${donor.id})" class="bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs"><i class="fa-solid fa-triangle-exclamation"></i></button>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function filterDonors() {
+            const blood = document.getElementById('search-blood').value;
+            const area = document.getElementById('search-area').value;
+            let filtered = donorsData.filter(d => (blood === 'ALL' || d.blood === blood) && (area === 'ALL' || d.area === area));
+            renderDonors(filtered);
+        }
+
+        function registerDonor(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            donorsData.unshift({ id: donorsData.length+1, name: name, blood: document.getElementById('reg-blood').value, area: document.getElementById('reg-area').value, phone: document.getElementById('reg-phone').value, lastDonate: document.getElementById('reg-date').value, verified: document.getElementById('reg-nid').files.length>0, reports:0 });
+            alert(`ধন্যবাদ ${name}! নিবন্ধন সফল হয়েছে।`);
+            document.getElementById('donor-registration-form').reset();
+            switchTab('search');
+        }
+
+        function handleEmergencyPost(event) { event.preventDefault(); alert("পোস্ট লাইভ করা হয়েছে!"); switchTab('home'); }
+        function reportDonor(id) { const d = donorsData.find(x => x.id === id); if(d) { d.reports++; if(d.reports>=3) { alert("আইডি ব্যান করা হয়েছে!"); donorsData = donorsData.filter(x => x.id !== id); } else { alert("রিপোর্ট নথিভুক্ত হয়েছে।"); } filterDonors(); } }
+
+        // --- PWA INSTALL ENGINE ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-banner').classList.remove('hidden');
+        });
+        document.getElementById('btn-install').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') document.getElementById('install-banner').classList.add('hidden');
+                deferredPrompt = null;
+            }
+        });
+        window.onload = function() { filterDonors(); };
+    </script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log("SW failed", err));
+        }
+    </script>
 </body>
 </html>
